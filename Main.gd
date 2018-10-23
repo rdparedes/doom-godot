@@ -5,9 +5,7 @@ extends Node
 # var b = "textvar"
 
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	pass
+	$Player.position = $StartPosition.position
 
 func _process(delta):
 	$Debug.update_player_angle($Player.get_angle())

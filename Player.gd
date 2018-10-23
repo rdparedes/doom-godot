@@ -2,6 +2,7 @@ extends Area2D
 
 export (int) var angular_velocity
 export (int) var speed
+var screensize
 
 func get_angle():
 	return int(abs(rotation_degrees))
@@ -13,9 +14,7 @@ func get_position_as_int():
 	}
 
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	pass
+	screensize = get_viewport_rect().size
 
 func _process(delta):
 	if Input.is_action_pressed("ui_left"):
@@ -24,6 +23,8 @@ func _process(delta):
 		_rotate_right(delta)
 	if Input.is_action_pressed("ui_up"):
 		_move_forward(delta)
+	if Input.is_action_pressed("ui_down"):
+		_move_backwards(delta)
 
 func _rotate_right(delta):
 	rotation_degrees += (delta * angular_velocity)
@@ -38,4 +39,11 @@ func _rotate_left(delta):
 func _move_forward(delta):
 	position.x += (delta * speed) * cos(rotation)
 	position.y += (delta * speed) * sin(rotation)
-	
+	position.x = clamp(position.x, 0, screensize.x)
+	position.y = clamp(position.y, 0, screensize.y)
+
+func _move_backwards(delta):
+	position.x -= (delta * speed) * cos(rotation)
+	position.y -= (delta * speed) * sin(rotation)
+	position.x = clamp(position.x, 0, screensize.x)
+	position.y = clamp(position.y, 0, screensize.y)

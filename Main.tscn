@@ -17,4 +17,9 @@ speed = 100
 
 [node name="Debug" parent="." index="1" instance=ExtResource( 3 )]
 
+[node name="StartPosition" type="Position2D" parent="." index="2"]
+
+position = Vector2( 160, 150 )
+_sections_unfolded = [ "Transform" ]
+
 
