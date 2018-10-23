@@ -13,6 +13,7 @@ _sections_unfolded = [ "Pause" ]
 
 gravity = 0.0
 angular_velocity = 200
+speed = 100
 
 [node name="Debug" parent="." index="1" instance=ExtResource( 3 )]
 

@@ -11,4 +11,4 @@ func _ready():
 
 func _process(delta):
 	$Debug.update_player_angle($Player.get_angle())
-	$Debug.update_player_position($Player.position)
+	$Debug.update_player_position($Player.get_position_as_int())

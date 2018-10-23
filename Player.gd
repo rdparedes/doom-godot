@@ -1,9 +1,16 @@
 extends Area2D
 
 export (int) var angular_velocity
+export (int) var speed
 
 func get_angle():
 	return int(abs(rotation_degrees))
+	
+func get_position_as_int():
+	return {
+		"x": int(position.x),
+		"y": int(position.y)
+	}
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -29,4 +36,6 @@ func _rotate_left(delta):
 		rotation_degrees = 0
 
 func _move_forward(delta):
-	pass
+	position.x += (delta * speed) * cos(rotation)
+	position.y += (delta * speed) * sin(rotation)
+	
