@@ -1,11 +1,15 @@
-extends Area2D
+extends KinematicBody2D
 
 export (int) var angular_velocity
 export (int) var speed
+
+var velocity = Vector2()
 var screensize
 
-func get_angle():
-	return int(abs(rotation_degrees))
+func get_rotation():
+	return int(
+		abs(global_rotation_degrees) if global_rotation_degrees <= 0 else (360 - global_rotation_degrees)
+	)
 	
 func get_position_as_int():
 	return {
@@ -15,35 +19,31 @@ func get_position_as_int():
 
 func _ready():
 	screensize = get_viewport_rect().size
+	
+func _physics_process(delta):
+	if Input.is_action_pressed("ui_up"):
+		_move_forward()
+	if Input.is_action_pressed("ui_down"):
+		_move_backwards()
+	position.x = clamp(position.x, 0, screensize.x)
+	position.y = clamp(position.y, 0, screensize.y)
 
 func _process(delta):
 	if Input.is_action_pressed("ui_left"):
 		_rotate_left(delta)
 	if Input.is_action_pressed("ui_right"):
 		_rotate_right(delta)
-	if Input.is_action_pressed("ui_up"):
-		_move_forward(delta)
-	if Input.is_action_pressed("ui_down"):
-		_move_backwards(delta)
 
 func _rotate_right(delta):
-	rotation_degrees += (delta * angular_velocity)
-	if rotation_degrees > 0:
-		rotation_degrees = -359
+	rotation += (delta * angular_velocity)
 	
 func _rotate_left(delta):
-	rotation_degrees -= (delta * angular_velocity)
-	if rotation_degrees <= -360:
-		rotation_degrees = 0
+	rotation -= (delta * angular_velocity)
 
-func _move_forward(delta):
-	position.x += (delta * speed) * cos(rotation)
-	position.y += (delta * speed) * sin(rotation)
-	position.x = clamp(position.x, 0, screensize.x)
-	position.y = clamp(position.y, 0, screensize.y)
+func _move_forward():
+	velocity = Vector2(speed * cos(rotation), speed * sin(rotation))
+	move_and_slide(velocity)
 
-func _move_backwards(delta):
-	position.x -= (delta * speed) * cos(rotation)
-	position.y -= (delta * speed) * sin(rotation)
-	position.x = clamp(position.x, 0, screensize.x)
-	position.y = clamp(position.y, 0, screensize.y)
+func _move_backwards():
+	velocity = Vector2(speed * cos(rotation), speed * sin(rotation))
+	move_and_slide(-velocity)

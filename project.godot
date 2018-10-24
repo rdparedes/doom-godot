@@ -24,6 +24,11 @@ window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 window/stretch/shrink="1"
 
+[layer_names]
+
+2d_physics/layer_1="Walls"
+2d_physics/layer_2="Player"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
