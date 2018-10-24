@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Debug.gd" type="Script" id=1]
 
-[node name="Debug" type="CanvasLayer"]
+[node name="Debug" type="CanvasLayer" index="0"]
 
 layer = 1
 offset = Vector2( 0, 0 )
@@ -115,6 +115,68 @@ max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
 
 [node name="Value" type="Label" parent="Position" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = 65.0
+margin_right = 73.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "0"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Margin", "Rect" ]
+
+[node name="Ray" type="Control" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 40.0
+margin_right = 10.0
+margin_bottom = 25.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="Ray" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 44.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Ray:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
+
+[node name="Value" type="Label" parent="Ray" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0

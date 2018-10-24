@@ -16,7 +16,7 @@ constant_linear_velocity = Vector2( 0, 0 )
 constant_angular_velocity = 0.0
 friction = 1.0
 bounce = 0.0
-_sections_unfolded = [ "Angular", "Applied Forces", "Collision", "Linear", "Transform" ]
+_sections_unfolded = [ "Angular", "Applied Forces", "Collision", "Linear", "Transform", "Visibility" ]
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 
