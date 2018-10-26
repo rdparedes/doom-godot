@@ -18,4 +18,5 @@ func _physics_process(delta):
 func _process(delta):
 	$Debug.update_player_angle($Player.get_rotation())
 	$Debug.update_player_position($Player.get_position_as_int())
-	$Debug.update_ray($Projection.x_intersection, $Projection.y_intersection)
+	$Debug.update_ray($Projection.horizontal_x_intersection, $Projection.horizontal_y_intersection,
+							$Projection.vertical_x_intersection, $Projection.vertical_y_intersection)

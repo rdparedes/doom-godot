@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Debug.gd" type="Script" id=1]
-[ext_resource path="res://Node2D.gd" type="Script" id=2]
+[ext_resource path="res://HIntersection.gd" type="Script" id=2]
+[ext_resource path="res://VIntersection.gd" type="Script" id=3]
 
 [node name="Debug" type="CanvasLayer" index="0"]
 
@@ -201,6 +202,11 @@ _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
 [node name="HIntersection" type="Node2D" parent="." index="3"]
 
 script = ExtResource( 2 )
-_sections_unfolded = [ "Transform", "Z Index" ]
+_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
+
+[node name="VIntersection" type="Node2D" parent="." index="4"]
+
+script = ExtResource( 3 )
+_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 
 
