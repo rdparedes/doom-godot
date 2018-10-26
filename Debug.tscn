@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Debug.gd" type="Script" id=1]
+[ext_resource path="res://Node2D.gd" type="Script" id=2]
 
 [node name="Debug" type="CanvasLayer" index="0"]
 
@@ -196,5 +197,10 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
+
+[node name="HIntersection" type="Node2D" parent="." index="3"]
+
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform", "Z Index" ]
 
 

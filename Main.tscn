@@ -3,10 +3,10 @@
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Debug.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Wall.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Projection.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Projection.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Wall.tscn" type="PackedScene" id=5]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -24,10 +24,14 @@ _sections_unfolded = [ "Collision", "Transform", "Visibility" ]
 angular_velocity = 5
 speed = 100
 
-[node name="Wall" parent="." index="3" instance=ExtResource( 4 )]
+[node name="Projection" parent="." index="3" instance=ExtResource( 4 )]
+
+[node name="Obstacles" type="Node2D" parent="." index="4"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall" parent="Obstacles" index="0" instance=ExtResource( 5 )]
 
 position = Vector2( 192, 64 )
-
-[node name="Projection" parent="." index="4" instance=ExtResource( 5 )]
 
 
