@@ -95,7 +95,7 @@ func _check_vertical_intersections(player_position, ray_degree):
 				return Vector2(vertical_x_intersection, vertical_y_intersection)
 		else:
 			vertical_x_intersection += _find_next_X_v_intersection(is_facing_right)
-			vertical_y_intersection += _find_next_Y_v_intersection(ray_degree)
+			vertical_y_intersection += _find_next_Y_v_intersection(ray_degree, is_facing_right)
 			var grid_x_coords = int(vertical_x_intersection / grid_unit_size)
 			var grid_y_coords = int(vertical_y_intersection / grid_unit_size)
 			if _wall_exists(grid_x_coords, grid_y_coords):
@@ -116,5 +116,5 @@ func _find_first_Y_v_intersection(ray_degree, player_position, vertical_x_inters
 func _find_next_X_v_intersection(is_facing_right):
 	return grid_unit_size if is_facing_right else -grid_unit_size
 
-func _find_next_Y_v_intersection(ray_degree):
-	return floor(grid_unit_size * tan(deg2rad(ray_degree)))
+func _find_next_Y_v_intersection(ray_degree, is_facing_right):
+	return floor(grid_unit_size * tan(deg2rad(-ray_degree if is_facing_right else ray_degree)))
