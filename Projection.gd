@@ -7,6 +7,7 @@ export (int) var grid_unit_size = 64
 
 var screensize
 var angle_between_rays
+var intersection
 var horizontal_x_intersection
 var horizontal_y_intersection
 var vertical_x_intersection
@@ -18,7 +19,7 @@ func cast_rays(player):
 	var player_position = player.get_position_as_int()
 	var ray_degree = (player_rotation - 30) if player_rotation >= 30 else (360 + (player_rotation - 30))
 	var ray_count = 0
-	#while ray_count <= FOV:
+	# while ray_count <= FOV:
 	_cast_ray(player_position, ray_degree)
 	if ray_degree == 359:
 		ray_degree = 0
@@ -34,8 +35,20 @@ func _draw():
 	pass
 
 func _cast_ray(player_position, ray_degree):
+	var ray_rad = deg2rad(ray_degree)
 	var horizontal_ray_collision = _check_horizontal_intersections(player_position, ray_degree)
 	var vertical_ray_collision = _check_vertical_intersections(player_position, ray_degree)
+	if horizontal_ray_collision and not vertical_ray_collision:
+		intersection = horizontal_ray_collision
+	elif vertical_ray_collision and not horizontal_ray_collision:
+		intersection = vertical_ray_collision
+	elif vertical_ray_collision and horizontal_ray_collision:
+		var distance_to_h = abs(player_position.x - horizontal_ray_collision.x) / cos(ray_rad)
+		var distance_to_v = abs(player_position.x - vertical_ray_collision.x) / cos(ray_rad)
+		intersection = horizontal_ray_collision \
+						if min(distance_to_h, distance_to_v) == distance_to_h else vertical_ray_collision
+	else:
+		intersection = null
 
 func _check_horizontal_intersections(player_position, ray_degree):
 	var i = 0
