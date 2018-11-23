@@ -6,7 +6,7 @@
 [ext_resource path="res://Projection.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Wall.tscn" type="PackedScene" id=5]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -15,7 +15,7 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="StartPosition" type="Position2D" parent="." index="1"]
 
-position = Vector2( 160, 150 )
+position = Vector2( 128, 128 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Player" parent="." index="2" instance=ExtResource( 3 )]
@@ -30,8 +30,30 @@ speed = 100
 
 _sections_unfolded = [ "Transform" ]
 
-[node name="Wall" parent="Obstacles" index="0" instance=ExtResource( 5 )]
+[node name="Wall5" parent="Obstacles" index="0" instance=ExtResource( 5 )]
 
-position = Vector2( 192, 64 )
+position = Vector2( 256, 64 )
+
+[node name="Wall" parent="Obstacles/Wall5" index="2" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 64 )
+
+[node name="Wall6" parent="Obstacles" index="1" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 0 )
+
+[node name="Wall8" parent="Obstacles" index="2" instance=ExtResource( 5 )]
+
+[node name="Wall" parent="Obstacles" index="3" instance=ExtResource( 5 )]
+
+position = Vector2( 64, 0 )
+
+[node name="Wall2" parent="Obstacles" index="4" instance=ExtResource( 5 )]
+
+position = Vector2( 128, 0 )
+
+[node name="Wall3" parent="Obstacles" index="5" instance=ExtResource( 5 )]
+
+position = Vector2( 192, 0 )
 
 

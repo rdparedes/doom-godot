@@ -18,5 +18,6 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 1 )
 grid_unit_size = 64
+player_speed = 1
 
 
