@@ -4,7 +4,7 @@
 [ext_resource path="res://HIntersection.gd" type="Script" id=2]
 [ext_resource path="res://VIntersection.gd" type="Script" id=3]
 
-[node name="Debug" type="CanvasLayer"]
+[node name="Debug" type="CanvasLayer" index="0"]
 
 layer = 1
 offset = Vector2( 0, 0 )
@@ -201,7 +201,6 @@ _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
 
 [node name="HIntersection" type="Node2D" parent="." index="3"]
 
-visible = false
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 

@@ -6,7 +6,7 @@
 [ext_resource path="res://Projection.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Wall.tscn" type="PackedScene" id=5]
 
-[node name="Main" type="Node" index="0"]
+[node name="Main" type="Node"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -26,7 +26,6 @@ speed = 100
 
 [node name="Projection" parent="." index="3" instance=ExtResource( 4 )]
 
-visible = false
 player_speed = 6
 
 [node name="Obstacles" type="Node2D" parent="." index="4"]
