@@ -4,7 +4,7 @@ var PROJECTION_TO_360_RATIO
 
 func _ready():
   $Projection.player.position = $StartPosition.position
-  PROJECTION_TO_360_RATIO = floor($Projection.ANGLE360 / 360)
+  PROJECTION_TO_360_RATIO = $Projection.ANGLE360 / 360
   var map_representation = []
   for n in $Obstacles.get_children():
     map_representation.append(
@@ -16,11 +16,12 @@ func _ready():
   $Projection.map_representation = map_representation
 
 func _physics_process(delta):
-  $Projection.update()
-  $Player.position = $Projection.player.position
-  $Player.global_rotation_degrees = floor($Projection.player.rotation / PROJECTION_TO_360_RATIO)
+  pass
 
 func _process(delta):
-  $Debug.update_player_angle($Projection.player.rotation)
+  $Projection.update()
+  $Player.position = $Projection.player.position
+  $Player.rotation_degrees = floor($Projection.player.rotation / PROJECTION_TO_360_RATIO)
+  $Debug.update_player_angle($Player.rotation_degrees)
   $Debug.update_player_position($Projection.player.position)
   $Debug.update_ray($Projection.debug_intersection)

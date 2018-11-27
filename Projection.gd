@@ -1,7 +1,7 @@
 extends Control
 
 export (int) var grid_unit_size = 64
-export (int) var player_speed = 1
+export (int) var player_speed = 6
 
 const FOV = 60
 const PROJECTION_PLANE_WIDTH = 320
@@ -44,7 +44,10 @@ var screensize
 var debug_intersection
 var map_representation		# Contains an array representing all coordinates that have a wall
 var process_timer = 0
-var process_timer_limit = 0.01
+var process_timer_limit = 0.05
+
+func arcToRad(angle):
+  return ((angle*PI)/ANGLE180)
 
 func _ready():
   screensize = get_viewport_rect().size
@@ -52,7 +55,7 @@ func _ready():
   # populate tables with rad values
   var radian
   for i in range(0, ANGLE360 + 1):
-    radian = deg2rad(i) + (0.0001)
+    radian = arcToRad(i) + (0.0001)
     f_sin_table.append(sin(radian))
     f_i_sin_table.append(1.0/f_sin_table[i])
     f_cos_table.append(cos(radian))
@@ -96,7 +99,7 @@ func _ready():
 
   # Table for Fishbowl distortion fix
   for i in range(-ANGLE30, ANGLE30 + 1):
-    radian = deg2rad(i)
+    radian = arcToRad(i)
     f_fish_table.append([i+ANGLE30,(1.0/cos(radian))])
 
 func _process(delta):
@@ -118,12 +121,12 @@ func _process(delta):
     _move_backwards(player_x_dir, player_y_dir)
 
 func _rotate_right(delta):
-  player.rotation += ANGLE5
+  player.rotation += ANGLE10
   if player.rotation >= ANGLE360:
     player.rotation -= ANGLE360
 
 func _rotate_left(delta):
-  player.rotation -= ANGLE5
+  player.rotation -= ANGLE10
   if player.rotation < ANGLE0:
     player.rotation += ANGLE360
 
