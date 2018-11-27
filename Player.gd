@@ -4,4 +4,4 @@ export (int) var angular_velocity
 export (int) var speed
 
 func _ready():
-	pass
+  pass
