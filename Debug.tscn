@@ -199,14 +199,13 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
 
-[node name="HIntersection" type="Node2D" parent="." index="3"]
+[node name="FirstRay" type="Node2D" parent="." index="3"]
 
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 
-[node name="VIntersection" type="Node2D" parent="." index="4"]
+[node name="LastRay" type="Node2D" parent="." index="4"]
 
-visible = false
 script = ExtResource( 3 )
 _sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 

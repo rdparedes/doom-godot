@@ -24,4 +24,4 @@ func _process(delta):
   $Player.rotation_degrees = floor($Projection.player.rotation / PROJECTION_TO_360_RATIO)
   $Debug.update_player_angle($Player.rotation_degrees)
   $Debug.update_player_position($Projection.player.position)
-  $Debug.update_ray($Projection.debug_intersection)
+  $Debug.update_ray($Projection.debug_first_ray, $Projection.debug_last_ray)

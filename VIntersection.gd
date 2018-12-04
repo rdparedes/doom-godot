@@ -7,4 +7,4 @@ func _ready():
   pass
 
 func _draw():
-  draw_circle(Vector2(x, y), 2, Color('#FF0000'))
+  draw_circle(Vector2(x, y), 1, Color('#00FF00'))
