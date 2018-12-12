@@ -31,7 +31,7 @@ var f_cos_table = []
 var f_i_cos_table = []
 var f_tan_table = []
 var f_i_tan_table = []
-var f_fish_table = []
+var f_fish_dict = {}
 var f_x_step_table = []
 var f_y_step_table = []
 
@@ -41,9 +41,14 @@ var player = {
 }
 
 var screensize
+
+# Vars for debugging
 var debug_first_ray
 var debug_last_ray
-var map_representation		# Contains an array representing all coordinates that have a wall
+
+# Array representing all coordinates that have a wall
+var map_representation
+
 var process_timer = 0
 var process_timer_limit = 0.05
 
@@ -53,7 +58,7 @@ func arcToRad(angle):
 func _ready():
   screensize = get_viewport_rect().size
 
-  # populate tables with rad values
+  # populate lookup tables with rad values
   var radian
   for i in range(0, ANGLE360 + 1):
     radian = arcToRad(i) + (0.0001)
@@ -98,7 +103,7 @@ func _ready():
       if f_y_step_table[i] > 0:
         f_y_step_table[i] = -f_y_step_table[i]
 
-  # Table for Fishbowl distortion fix
+  # Lookup table for Fishbowl distortion fix
   for i in range(-ANGLE30, ANGLE30 + 1):
     radian = arcToRad(i)
     f_fish_table.append([i+ANGLE30,(1.0/cos(radian))])
