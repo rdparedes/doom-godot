@@ -106,7 +106,10 @@ func _ready():
   # Lookup table for Fishbowl distortion fix
   for i in range(-ANGLE30, ANGLE30 + 1):
     radian = arcToRad(i)
-    f_fish_table.append([i+ANGLE30,(1.0/cos(radian))])
+    f_fish_dict[int(i+ANGLE30)] = (1.0/cos(radian))
+
+func _draw():
+  _cast_rays()
 
 func _process(delta):
   process_timer += delta
@@ -144,11 +147,8 @@ func _move_backwards(player_x_dir, player_y_dir):
   player.position.x -= round(player_x_dir * player_speed)
   player.position.y -= round(player_y_dir * player_speed)
 
-func _draw():
-  _cast_rays()
-
 func _draw_slice(ray_distance, ray_index):
-  var projected_slice_height = grid_unit_size / ray_distance * PROJECTION_PLANE_DISTANCE
+  var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance
   draw_rect(
     Rect2(
       (PROJECTION_PLANE_WIDTH - ray_index),
@@ -174,8 +174,7 @@ func _cast_rays():
       ray_index == PROJECTION_PLANE_WIDTH
     )
     if ray_distance:
-      var distorted_angle = ray_degree - player.rotation
-      distorted_angle != 0 and (ray_distance *= f_cos_table[distorted_angle])
+      ray_distance /= f_fish_dict[ray_index]
       _draw_slice(ray_distance, ray_index)
     ray_degree += 1
     if ray_degree >= ANGLE360:
@@ -254,11 +253,8 @@ func _find_first_X_h_intersection(ray_degree, player_position, horizontal_y_inte
 func _find_next_Y_h_intersection(is_facing_down):
   return grid_unit_size if is_facing_down else -grid_unit_size
 
-func _find_next_X_h_intersection(ray_degree, is_facing_down):
-  if is_facing_down:
-    return floor(grid_unit_size / f_tan_table[ray_degree])
-  else:
-    return -floor(grid_unit_size / f_tan_table[ray_degree])
+func _find_next_X_h_intersection(ray_degree):
+  return f_x_step_table[ray_degree]
 
 func _check_vertical_intersections(player_position, ray_degree):
   var i = 0
@@ -277,7 +273,7 @@ func _check_vertical_intersections(player_position, ray_degree):
         return Vector2(vertical_x_intersection, vertical_y_intersection)
     else:
       vertical_x_intersection += _find_next_X_v_intersection(is_facing_left)
-      vertical_y_intersection -= _find_next_Y_v_intersection(ray_degree, is_facing_left)
+      vertical_y_intersection -= _find_next_Y_v_intersection(ray_degree)
       var grid_x_coords = int(vertical_x_intersection / grid_unit_size)
       var grid_y_coords = int(vertical_y_intersection / grid_unit_size)
       if _wall_exists(grid_x_coords, grid_y_coords):
@@ -298,5 +294,5 @@ func _find_first_Y_v_intersection(ray_degree, player_position, vertical_x_inters
 func _find_next_X_v_intersection(is_facing_left):
   return -grid_unit_size if is_facing_left else grid_unit_size
 
-func _find_next_Y_v_intersection(ray_degree, is_facing_left):
-  return floor(grid_unit_size * (f_tan_table[ray_degree] if is_facing_left else f_tan_table[-ray_degree]))
+func _find_next_Y_v_intersection(ray_degree):
+  return f_y_step_table[ray_degree]
