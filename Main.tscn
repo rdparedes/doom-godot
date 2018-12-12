@@ -38,7 +38,7 @@ position = Vector2( 384, 64 )
 
 [node name="Wall5" parent="Obstacles" index="1" instance=ExtResource( 5 )]
 
-position = Vector2( 384, 128 )
+position = Vector2( 256, 192 )
 
 [node name="Wall6" parent="Obstacles" index="2" instance=ExtResource( 5 )]
 
@@ -86,6 +86,6 @@ position = Vector2( 64, 384 )
 
 [node name="Wall14" parent="Obstacles" index="13" instance=ExtResource( 5 )]
 
-position = Vector2( 256, 192 )
+position = Vector2( 256, 64 )
 
 
