@@ -2,6 +2,8 @@ extends Control
 
 export (int) var grid_unit_size = 64
 export (int) var player_speed = 6
+# View distance in blocks. e.g.: 20 (blocks) x 64 (grid_unit_size) = 1280 pixels of viewing distance
+export (int) var view_distance = 20
 
 const FOV = 60
 const PROJECTION_PLANE_WIDTH = 320
@@ -21,7 +23,6 @@ var ANGLE5 = floor(ANGLE30/6)
 var ANGLE10 = floor(ANGLE5*2)
 var ANGLE45 = floor(ANGLE15*3)
 
-var RAY_WIDTH = PROJECTION_PLANE_WIDTH / FOV
 var PROJECTION_PLANE_DISTANCE = floor(PROJECTION_X_CENTER / tan(deg2rad(FOV / 2)))
 
 # Trigonometric tables for quick calculations (the ones with "i" are inverse tables)
@@ -40,14 +41,14 @@ var player = {
   "rotation": ANGLE0
 }
 
-var screensize
-
 # Vars for debugging
 var debug_first_ray
 var debug_last_ray
+var debug_ray_intersection
 
 # Array representing all coordinates that have a wall
 var map_representation
+var player_view_area = Rect2(0, 0, 0, 0)
 
 var process_timer = 0
 var process_timer_limit = 0.05
@@ -56,8 +57,6 @@ func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
 
 func _ready():
-  screensize = get_viewport_rect().size
-
   # populate lookup tables with rad values
   var radian
   for i in range(0, ANGLE360 + 1):
@@ -129,6 +128,13 @@ func _process(delta):
   if Input.is_action_pressed("ui_down"):
     _move_backwards(player_x_dir, player_y_dir)
 
+  player_view_area = Rect2(
+    player.position.x - (view_distance/2 * grid_unit_size),
+    player.position.y - (view_distance/2 * grid_unit_size),
+    view_distance * grid_unit_size,
+    view_distance * grid_unit_size
+  )
+
 func _rotate_right(delta):
   player.rotation += ANGLE10
   if player.rotation >= ANGLE360:
@@ -151,7 +157,7 @@ func _draw_slice(ray_distance, ray_index):
   var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance
   draw_rect(
     Rect2(
-      (PROJECTION_PLANE_WIDTH - ray_index),
+      ray_index,
       PROJECTION_Y_CENTER - int(projected_slice_height / 2),
       1,
       projected_slice_height
@@ -182,73 +188,74 @@ func _cast_rays():
     ray_index += 1
 
 func _cast_ray_and_return_distance(player_position, ray_degree, is_first_ray, is_last_ray):
-  var ray_rad = arcToRad(ray_degree)
-  var horizontal_ray_collision = _check_horizontal_intersections(player_position, ray_degree)
-  var vertical_ray_collision = _check_vertical_intersections(player_position, ray_degree)
+  var horizontal_ray_collision = _get_horizontal_ray_collision(player_position, ray_degree)
+  var vertical_ray_collision = _get_vertical_ray_collision(player_position, ray_degree)
   var ray_distance = null
 
-  var debug_ray_intersection = null
-
   if horizontal_ray_collision and not vertical_ray_collision:
-    debug_ray_intersection = horizontal_ray_collision
-    ray_distance = abs(player_position.y - horizontal_ray_collision.y) / f_cos_table[ray_rad]
+    ray_distance = horizontal_ray_collision
   elif vertical_ray_collision and not horizontal_ray_collision:
-    debug_ray_intersection = vertical_ray_collision
-    ray_distance = abs(player_position.x - vertical_ray_collision.x) / f_sin_table[ray_rad]
+    ray_distance = vertical_ray_collision
   elif vertical_ray_collision and horizontal_ray_collision:
-    var distance_to_h = abs(player_position.y - horizontal_ray_collision.y) / f_cos_table[ray_rad]
-    var distance_to_v = abs(player_position.x - vertical_ray_collision.x) / f_sin_table[ray_rad]
-
-    ray_distance = min(distance_to_h, distance_to_v)
-
-    debug_ray_intersection = horizontal_ray_collision \
-            if floor(ray_distance) == floor(distance_to_h) else vertical_ray_collision
-
-  # Draw FOV on screen for guide only
-  if is_first_ray:
-    debug_first_ray = debug_ray_intersection
-  elif is_last_ray:
-    debug_last_ray = debug_ray_intersection
+    if horizontal_ray_collision < vertical_ray_collision:
+      ray_distance = horizontal_ray_collision
+    else:
+      ray_distance = vertical_ray_collision
 
   return ray_distance
 
-func _check_horizontal_intersections(player_position, ray_degree):
-  var i = 0
+func _get_horizontal_ray_collision(player_position, ray_degree):
+  # Ignore ray if it's directly facing up or down
+  if ray_degree == ANGLE90 or ray_degree == ANGLE270:
+    return null
+
   var is_facing_down = (ray_degree > ANGLE0 and ray_degree < ANGLE180)
-  var horizontal_x_intersection
-  var horizontal_y_intersection
+  var y_intersection
+  var x_intersection
+  var i = 0
 
   while (true):
     if i == 0:
-      horizontal_y_intersection = _find_first_Y_h_intersection(ray_degree, player_position, is_facing_down)
-      horizontal_x_intersection = _find_first_X_h_intersection(ray_degree, player_position, horizontal_y_intersection)
-      var grid_x_coords = int(horizontal_x_intersection / grid_unit_size)
-      var grid_y_coords = int(horizontal_y_intersection / grid_unit_size)
+      y_intersection = _find_first_Y_h_intersection(ray_degree, player_position, is_facing_down)
+      x_intersection = _find_first_X_h_intersection(ray_degree, player_position, y_intersection)
+
+      if not is_facing_down:
+        y_intersection -= 1
+
+      var grid_x_coords = floor(x_intersection / grid_unit_size)
+      var grid_y_coords = floor(y_intersection / grid_unit_size)
+
+      if _wall_exists(grid_x_coords, grid_y_coords):
+        return (x_intersection - player_position.x) * f_i_cos_table[ray_degree]
+
       i += 1
-      if _wall_exists(grid_x_coords, grid_y_coords):
-        return Vector2(horizontal_x_intersection, horizontal_y_intersection)
     else:
-      horizontal_y_intersection += _find_next_Y_h_intersection(is_facing_down)
-      horizontal_x_intersection += _find_next_X_h_intersection(ray_degree, is_facing_down)
-      var grid_x_coords = int(horizontal_x_intersection / grid_unit_size)
-      var grid_y_coords = int(horizontal_y_intersection / grid_unit_size)
+      y_intersection += _find_next_Y_h_intersection(is_facing_down)
+      x_intersection += _find_next_X_h_intersection(ray_degree)
+
+      var grid_x_coords = floor(x_intersection / grid_unit_size)
+      var grid_y_coords = floor(y_intersection / grid_unit_size)
+
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return Vector2(horizontal_x_intersection, horizontal_y_intersection)
-      if horizontal_y_intersection < 0 or horizontal_y_intersection > screensize.y \
-        or horizontal_x_intersection < 0 or horizontal_x_intersection > screensize.x:
+        return (x_intersection - player_position.x) * f_i_cos_table[ray_degree]
+
+      if y_intersection < player_view_area.position.y \
+         or y_intersection > player_view_area.end.y \
+         or x_intersection < player_view_area.position.x \
+         or x_intersection > player_view_area.end.x:
           break
 
 func _wall_exists(x, y):
-  return map_representation.has([x, y])
+  return map_representation.has([int(x), int(y)])
 
 func _find_first_Y_h_intersection(ray_degree, player_position, is_facing_down):
   if is_facing_down:
     return (floor(player_position.y / grid_unit_size) * grid_unit_size + grid_unit_size)
   else:
-    return ((floor(player_position.y / grid_unit_size) * grid_unit_size) - 1)
+    return (floor(player_position.y / grid_unit_size) * grid_unit_size)
 
-func _find_first_X_h_intersection(ray_degree, player_position, horizontal_y_intersection):
-  return floor(player_position.x - ((player_position.y - horizontal_y_intersection) / f_tan_table[ray_degree]))
+func _find_first_X_h_intersection(ray_degree, player_position, y_intersection):
+  return (f_i_tan_table[ray_degree] * (y_intersection - player_position.y)) + player_position.x
 
 func _find_next_Y_h_intersection(is_facing_down):
   return grid_unit_size if is_facing_down else -grid_unit_size
@@ -256,40 +263,55 @@ func _find_next_Y_h_intersection(is_facing_down):
 func _find_next_X_h_intersection(ray_degree):
   return f_x_step_table[ray_degree]
 
-func _check_vertical_intersections(player_position, ray_degree):
-  var i = 0
+func _get_vertical_ray_collision(player_position, ray_degree):
+  # Ignore ray if it's directly facing right or left
+  if ray_degree == ANGLE0 or ray_degree == ANGLE180:
+    return null
+
   var is_facing_left = (ray_degree > ANGLE90 and ray_degree < ANGLE270)
-  var vertical_x_intersection
-  var vertical_y_intersection
+  var x_intersection
+  var y_intersection
+  var i = 0
 
   while (true):
     if i == 0:
-      vertical_x_intersection = _find_first_X_v_intersection(ray_degree, player_position, is_facing_left)
-      vertical_y_intersection = _find_first_Y_v_intersection(ray_degree, player_position, vertical_x_intersection)
-      var grid_x_coords = int(vertical_x_intersection / grid_unit_size)
-      var grid_y_coords = int(vertical_y_intersection / grid_unit_size)
+      x_intersection = _find_first_X_v_intersection(ray_degree, player_position, is_facing_left)
+      y_intersection = _find_first_Y_v_intersection(ray_degree, player_position, x_intersection)
+
+      if is_facing_left:
+        x_intersection -= 1
+
+      var grid_x_coords = floor(x_intersection / grid_unit_size)
+      var grid_y_coords = floor(y_intersection / grid_unit_size)
+
+      if _wall_exists(grid_x_coords, grid_y_coords):
+        return (y_intersection - player_position.y) * f_i_sin_table[ray_degree]
+
       i += 1
-      if _wall_exists(grid_x_coords, grid_y_coords):
-        return Vector2(vertical_x_intersection, vertical_y_intersection)
     else:
-      vertical_x_intersection += _find_next_X_v_intersection(is_facing_left)
-      vertical_y_intersection -= _find_next_Y_v_intersection(ray_degree)
-      var grid_x_coords = int(vertical_x_intersection / grid_unit_size)
-      var grid_y_coords = int(vertical_y_intersection / grid_unit_size)
+      x_intersection += _find_next_X_v_intersection(is_facing_left)
+      y_intersection += _find_next_Y_v_intersection(ray_degree)
+
+      var grid_x_coords = floor(x_intersection / grid_unit_size)
+      var grid_y_coords = floor(y_intersection / grid_unit_size)
+
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return Vector2(vertical_x_intersection, vertical_y_intersection)
-      if vertical_y_intersection < 0 or vertical_y_intersection > screensize.y \
-        or vertical_x_intersection < 0 or vertical_x_intersection > screensize.x:
+        return (y_intersection - player_position.y) * f_i_sin_table[ray_degree]
+
+      if y_intersection < player_view_area.position.y \
+        or y_intersection > player_view_area.end.y \
+        or x_intersection < player_view_area.position.x \
+        or x_intersection > player_view_area.end.x:
           break
 
 func _find_first_X_v_intersection(ray_degree, player_position, is_facing_left):
   if is_facing_left:
-    return (floor(player_position.x / grid_unit_size) * grid_unit_size - 1)
+    return (floor(player_position.x / grid_unit_size) * grid_unit_size)
   else:
     return ((floor(player_position.x / grid_unit_size) * grid_unit_size) + grid_unit_size)
 
-func _find_first_Y_v_intersection(ray_degree, player_position, vertical_x_intersection):
-  return floor(player_position.y - ((player_position.x - vertical_x_intersection) * f_tan_table[ray_degree]))
+func _find_first_Y_v_intersection(ray_degree, player_position, x_intersection):
+  return ((x_intersection - player_position.x) * f_tan_table[ray_degree]) + player_position.y
 
 func _find_next_X_v_intersection(is_facing_left):
   return -grid_unit_size if is_facing_left else grid_unit_size
