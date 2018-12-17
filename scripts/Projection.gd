@@ -155,6 +155,12 @@ func _move_backwards(player_x_dir, player_y_dir):
 
 func _draw_slice(ray_distance, ray_index):
   var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance
+  var color = stepify((255 - (floor(ray_distance) / 850) * 255) / 255, 0.001)
+  if color < 0.25:
+    color = 0.25
+  if color > 1:
+    color = 1
+  var drawingColor = Color(color, color, color)
   draw_rect(
     Rect2(
       ray_index,
@@ -162,7 +168,7 @@ func _draw_slice(ray_distance, ray_index):
       1,
       projected_slice_height
     ),
-    Color("#FF0000")
+    drawingColor
   )
 
 func _cast_rays():
