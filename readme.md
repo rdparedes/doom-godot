@@ -4,7 +4,5 @@ This is a sample implementation of the Ray Casting technique to make a Doom-like
 
 # TODO
 
-- Activate / deactivate HUD on command
-- Camera follows HUD player
+- Restrict movement of player to screen
 - Add shading to show depth
-- Put minimap to the right of rendering
