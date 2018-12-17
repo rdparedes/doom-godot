@@ -6,8 +6,8 @@ export (int) var player_speed = 6
 export (int) var view_distance = 20
 
 const FOV = 60
-var PROJECTION_PLANE_WIDTH = OS.get_real_window_size().x
-var PROJECTION_PLANE_HEIGHT = OS.get_real_window_size().y
+var PROJECTION_PLANE_WIDTH = 640
+var PROJECTION_PLANE_HEIGHT = 400
 var PROJECTION_X_CENTER = PROJECTION_PLANE_WIDTH / 2
 var PROJECTION_Y_CENTER = PROJECTION_PLANE_HEIGHT / 2
 
@@ -51,7 +51,7 @@ var map_representation
 var player_view_area = Rect2(0, 0, 0, 0)
 
 var process_timer = 0
-var process_timer_limit = 0.05
+var process_timer_limit = 0.02
 
 func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
@@ -110,7 +110,7 @@ func _ready():
 func _draw():
   _cast_rays()
 
-func _process(delta):
+func _physics_process(delta):
   process_timer += delta
   if process_timer < process_timer_limit:
     return
@@ -136,12 +136,12 @@ func _process(delta):
   )
 
 func _rotate_right(delta):
-  player.rotation += ANGLE10
+  player.rotation += ANGLE5
   if player.rotation >= ANGLE360:
     player.rotation -= ANGLE360
 
 func _rotate_left(delta):
-  player.rotation -= ANGLE10
+  player.rotation -= ANGLE5
   if player.rotation < ANGLE0:
     player.rotation += ANGLE360
 
