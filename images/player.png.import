@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bricks.png-d949ec369d9f5322a1ea15fdf6b91ae6.stex"
+path="res://.import/player.png-163753890810fa89776ed0f872fd9df1.stex"
 
 [deps]
 
-source_file="res://bricks.png"
-dest_files=[ "res://.import/bricks.png-d949ec369d9f5322a1ea15fdf6b91ae6.stex" ]
+source_file="res://images/player.png"
+dest_files=[ "res://.import/player.png-163753890810fa89776ed0f872fd9df1.stex" ]
 
 [params]
 

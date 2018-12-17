@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="doom-godot"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
 [display]

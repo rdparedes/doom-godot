@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Debug.gd" type="Script" id=1]
-[ext_resource path="res://HIntersection.gd" type="Script" id=2]
-[ext_resource path="res://VIntersection.gd" type="Script" id=3]
+[ext_resource path="res://scripts/Debug.gd" type="Script" id=1]
+[ext_resource path="res://scripts/HIntersection.gd" type="Script" id=2]
+[ext_resource path="res://scripts/VIntersection.gd" type="Script" id=3]
 
-[node name="Debug" type="CanvasLayer" index="0"]
+[node name="Debug" type="CanvasLayer"]
 
 layer = 1
 offset = Vector2( 0, 0 )
