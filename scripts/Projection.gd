@@ -6,12 +6,12 @@ export (int) var player_speed = 6
 export (int) var view_distance = 20
 
 const FOV = 60
-const PROJECTION_PLANE_WIDTH = 320
-const PROJECTION_PLANE_HEIGHT = 200
+var PROJECTION_PLANE_WIDTH = OS.get_real_window_size().x
+var PROJECTION_PLANE_HEIGHT = OS.get_real_window_size().y
 var PROJECTION_X_CENTER = PROJECTION_PLANE_WIDTH / 2
 var PROJECTION_Y_CENTER = PROJECTION_PLANE_HEIGHT / 2
 
-const ANGLE60 = PROJECTION_PLANE_WIDTH
+var ANGLE60 = PROJECTION_PLANE_WIDTH
 var ANGLE30 = floor(ANGLE60/2)
 var ANGLE15 = floor(ANGLE30/2)
 var ANGLE90 = floor(ANGLE30*3)

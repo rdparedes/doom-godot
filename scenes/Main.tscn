@@ -28,9 +28,8 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Player" parent="HUD" index="0" instance=ExtResource( 4 )]
 
-_sections_unfolded = [ "Collision", "Transform", "Visibility" ]
-angular_velocity = 5
-speed = 100
+angular_velocity = 100
+speed = 5
 
 [node name="Obstacles" type="Node2D" parent="HUD" index="1"]
 
