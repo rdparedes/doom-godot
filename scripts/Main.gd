@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 var PROJECTION_TO_360_RATIO
 
@@ -15,11 +15,7 @@ func _ready():
     )
   $Projection.map_representation = map_representation
 
-func _physics_process(delta):
-  pass
-
 func _process(delta):
-  $Projection.update()
   $HUD/Player.position = $Projection.player.position
   $HUD/Player.rotation_degrees = floor($Projection.player.rotation / PROJECTION_TO_360_RATIO)
 

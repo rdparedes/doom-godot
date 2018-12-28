@@ -6,7 +6,7 @@
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Wall.tscn" type="PackedScene" id=5]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node2D"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -73,5 +73,169 @@ position = Vector2( 256, 192 )
 [node name="Wall15" parent="HUD/Obstacles" index="8" instance=ExtResource( 5 )]
 
 position = Vector2( 256, 256 )
+
+[node name="Wall37" parent="HUD/Obstacles" index="9" instance=ExtResource( 5 )]
+
+position = Vector2( 320, 256 )
+
+[node name="Wall38" parent="HUD/Obstacles" index="10" instance=ExtResource( 5 )]
+
+position = Vector2( 384, 256 )
+
+[node name="Wall16" parent="HUD/Obstacles" index="11" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 448 )
+
+[node name="Wall17" parent="HUD/Obstacles" index="12" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 512 )
+
+[node name="Wall35" parent="HUD/Obstacles" index="13" instance=ExtResource( 5 )]
+
+position = Vector2( 320, 448 )
+
+[node name="Wall36" parent="HUD/Obstacles" index="14" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 512 )
+
+[node name="Wall39" parent="HUD/Obstacles" index="15" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 576 )
+
+[node name="Wall42" parent="HUD/Obstacles" index="16" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 768 )
+
+[node name="Wall45" parent="HUD/Obstacles" index="17" instance=ExtResource( 5 )]
+
+position = Vector2( 512, 768 )
+
+[node name="Wall46" parent="HUD/Obstacles" index="18" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 640 )
+
+[node name="Wall43" parent="HUD/Obstacles" index="19" instance=ExtResource( 5 )]
+
+position = Vector2( 576, 768 )
+
+[node name="Wall47" parent="HUD/Obstacles" index="20" instance=ExtResource( 5 )]
+
+position = Vector2( 640, 768 )
+
+[node name="Wall48" parent="HUD/Obstacles" index="21" instance=ExtResource( 5 )]
+
+position = Vector2( 704, 768 )
+
+[node name="Wall49" parent="HUD/Obstacles" index="22" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 768 )
+
+[node name="Wall50" parent="HUD/Obstacles" index="23" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 704 )
+
+[node name="Wall51" parent="HUD/Obstacles" index="24" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 640 )
+
+[node name="Wall52" parent="HUD/Obstacles" index="25" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 576 )
+
+[node name="Wall53" parent="HUD/Obstacles" index="26" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 512 )
+
+[node name="Wall54" parent="HUD/Obstacles" index="27" instance=ExtResource( 5 )]
+
+position = Vector2( 768, 448 )
+
+[node name="Wall55" parent="HUD/Obstacles" index="28" instance=ExtResource( 5 )]
+
+position = Vector2( 704, 448 )
+
+[node name="Wall56" parent="HUD/Obstacles" index="29" instance=ExtResource( 5 )]
+
+position = Vector2( 640, 448 )
+
+[node name="Wall44" parent="HUD/Obstacles" index="30" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 704 )
+
+[node name="Wall40" parent="HUD/Obstacles" index="31" instance=ExtResource( 5 )]
+
+position = Vector2( 384, 448 )
+
+[node name="Wall41" parent="HUD/Obstacles" index="32" instance=ExtResource( 5 )]
+
+position = Vector2( 448, 448 )
+
+[node name="Wall18" parent="HUD/Obstacles" index="33" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 576 )
+
+[node name="Wall19" parent="HUD/Obstacles" index="34" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 640 )
+
+[node name="Wall20" parent="HUD/Obstacles" index="35" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 704 )
+
+[node name="Wall21" parent="HUD/Obstacles" index="36" instance=ExtResource( 5 )]
+
+position = Vector2( 128, 768 )
+
+[node name="Wall24" parent="HUD/Obstacles" index="37" instance=ExtResource( 5 )]
+
+position = Vector2( 64, 768 )
+
+[node name="Wall25" parent="HUD/Obstacles" index="38" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 768 )
+
+[node name="Wall26" parent="HUD/Obstacles" index="39" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 704 )
+
+[node name="Wall27" parent="HUD/Obstacles" index="40" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 640 )
+
+[node name="Wall28" parent="HUD/Obstacles" index="41" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 576 )
+
+[node name="Wall29" parent="HUD/Obstacles" index="42" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 512 )
+
+[node name="Wall30" parent="HUD/Obstacles" index="43" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 448 )
+
+[node name="Wall31" parent="HUD/Obstacles" index="44" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 384 )
+
+[node name="Wall32" parent="HUD/Obstacles" index="45" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 320 )
+
+[node name="Wall33" parent="HUD/Obstacles" index="46" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 256 )
+
+[node name="Wall34" parent="HUD/Obstacles" index="47" instance=ExtResource( 5 )]
+
+position = Vector2( 0, 192 )
+
+[node name="Wall23" parent="HUD/Obstacles" index="48" instance=ExtResource( 5 )]
+
+position = Vector2( 192, 768 )
+
+[node name="Wall22" parent="HUD/Obstacles" index="49" instance=ExtResource( 5 )]
+
+position = Vector2( 256, 768 )
 
 

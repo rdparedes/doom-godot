@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 export (int) var grid_unit_size = 64
 export (int) var player_speed = 6
@@ -53,10 +53,17 @@ var player_view_area = Rect2(0, 0, 0, 0)
 var process_timer = 0
 var process_timer_limit = 0.02
 
+var wall_texture
+
 func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
 
 func _ready():
+  var wall_img = Image.new()
+  wall_img.load('res://images/bricks.png')
+  wall_texture = ImageTexture.new()
+  wall_texture.create_from_image(wall_img)
+
   # populate lookup tables with rad values
   var radian
   for i in range(0, ANGLE360 + 1):
@@ -109,12 +116,15 @@ func _ready():
 
 func _draw():
   _cast_rays()
+  
+func _process(delta):
+#  process_timer += delta
+#  if process_timer < process_timer_limit:
+#    return
+#  process_timer = 0
+  update()
 
 func _physics_process(delta):
-  process_timer += delta
-  if process_timer < process_timer_limit:
-    return
-  process_timer = 0
   if Input.is_action_pressed("ui_left"):
     _rotate_left(delta)
   if Input.is_action_pressed("ui_right"):
@@ -153,7 +163,7 @@ func _move_backwards(player_x_dir, player_y_dir):
   player.position.x -= round(player_x_dir * player_speed)
   player.position.y -= round(player_y_dir * player_speed)
 
-func _draw_slice(ray_distance, ray_index):
+func _draw_slice(ray_distance, ray_index, player_rotation):
   var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance
   var color = stepify((255 - (floor(ray_distance) / 850) * 255) / 255, 0.001)
   if color < 0.25:
@@ -161,14 +171,30 @@ func _draw_slice(ray_distance, ray_index):
   if color > 1:
     color = 1
   var drawingColor = Color(color, color, color)
-  draw_rect(
+#  draw_rect(
+#    Rect2(
+#      ray_index,
+#      PROJECTION_Y_CENTER - int(projected_slice_height / 2),
+#      1,
+#      projected_slice_height
+#    ),
+#    drawingColor
+#  )
+#  draw_texture(wall_texture, Vector2(12, 12))
+  draw_texture_rect_region(
+    wall_texture,
     Rect2(
       ray_index,
       PROJECTION_Y_CENTER - int(projected_slice_height / 2),
       1,
       projected_slice_height
     ),
-    drawingColor
+    Rect2(
+      ray_index,
+      0,
+      1,
+      64
+    )
   )
 
 func _cast_rays():
@@ -187,7 +213,7 @@ func _cast_rays():
     )
     if ray_distance:
       ray_distance /= f_fish_dict[ray_index]
-      _draw_slice(ray_distance, ray_index)
+      _draw_slice(ray_distance, ray_index, player.rotation)
     ray_degree += 1
     if ray_degree >= ANGLE360:
       ray_degree -= ANGLE360
