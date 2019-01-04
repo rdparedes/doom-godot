@@ -3,7 +3,7 @@ extends Node2D
 export (int) var grid_unit_size = 64
 export (int) var player_speed = 6
 # View distance in blocks. e.g.: 20 (blocks) x 64 (grid_unit_size) = 1280 pixels of viewing distance
-export (int) var view_distance = 20
+export (int) var view_distance = 15
 
 const FOV = 60
 var PROJECTION_PLANE_WIDTH = 640
@@ -49,9 +49,6 @@ var debug_ray_intersection
 # Array representing all coordinates that have a wall
 var map_representation
 var player_view_area = Rect2(0, 0, 0, 0)
-
-var process_timer = 0
-var process_timer_limit = 0.02
 
 var wall_texture
 
@@ -118,10 +115,6 @@ func _draw():
   _cast_rays()
   
 func _process(delta):
-#  process_timer += delta
-#  if process_timer < process_timer_limit:
-#    return
-#  process_timer = 0
   update()
 
 func _physics_process(delta):
@@ -163,37 +156,15 @@ func _move_backwards(player_x_dir, player_y_dir):
   player.position.x -= round(player_x_dir * player_speed)
   player.position.y -= round(player_y_dir * player_speed)
 
-func _draw_slice(ray_distance, ray_index, player_rotation):
+func _draw_slice(ray_distance, ray_index, player_rotation, texture_offset):
   var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance
-  var color = stepify((255 - (floor(ray_distance) / 850) * 255) / 255, 0.001)
-  if color < 0.25:
-    color = 0.25
-  if color > 1:
-    color = 1
-  var drawingColor = Color(color, color, color)
-#  draw_rect(
-#    Rect2(
-#      ray_index,
-#      PROJECTION_Y_CENTER - int(projected_slice_height / 2),
-#      1,
-#      projected_slice_height
-#    ),
-#    drawingColor
-#  )
-#  draw_texture(wall_texture, Vector2(12, 12))
   draw_texture_rect_region(
     wall_texture,
     Rect2(
-      ray_index,
-      PROJECTION_Y_CENTER - int(projected_slice_height / 2),
-      1,
-      projected_slice_height
+      ray_index, PROJECTION_Y_CENTER - int(projected_slice_height / 2), 1, projected_slice_height
     ),
     Rect2(
-      ray_index,
-      0,
-      1,
-      64
+      floor(texture_offset), 0, 1, 64
     )
   )
 
@@ -205,36 +176,42 @@ func _cast_rays():
   var ray_index = 0
 
   while ray_index <= PROJECTION_PLANE_WIDTH:
-    var ray_distance = _cast_ray_and_return_distance(
+    var ray_data = _cast_ray(
       player.position,
       ray_degree,
       ray_index == 0,
       ray_index == PROJECTION_PLANE_WIDTH
     )
-    if ray_distance:
-      ray_distance /= f_fish_dict[ray_index]
-      _draw_slice(ray_distance, ray_index, player.rotation)
+    if ray_data:
+      var ray_distance = ray_data['ray_distance']
+      if ray_distance:
+        ray_distance /= f_fish_dict[ray_index]
+        _draw_slice(ray_distance, ray_index, player.rotation, ray_data['texture_offset'])
     ray_degree += 1
     if ray_degree >= ANGLE360:
       ray_degree -= ANGLE360
     ray_index += 1
 
-func _cast_ray_and_return_distance(player_position, ray_degree, is_first_ray, is_last_ray):
+func _cast_ray(player_position, ray_degree, is_first_ray, is_last_ray):
   var horizontal_ray_collision = _get_horizontal_ray_collision(player_position, ray_degree)
   var vertical_ray_collision = _get_vertical_ray_collision(player_position, ray_degree)
-  var ray_distance = null
+  var ray_collision = null
 
   if horizontal_ray_collision and not vertical_ray_collision:
-    ray_distance = horizontal_ray_collision
+    ray_collision = horizontal_ray_collision
   elif vertical_ray_collision and not horizontal_ray_collision:
-    ray_distance = vertical_ray_collision
+    ray_collision = vertical_ray_collision
   elif vertical_ray_collision and horizontal_ray_collision:
-    if horizontal_ray_collision < vertical_ray_collision:
-      ray_distance = horizontal_ray_collision
+    if horizontal_ray_collision['distance'] < vertical_ray_collision['distance']:
+      ray_collision = horizontal_ray_collision
     else:
-      ray_distance = vertical_ray_collision
+      ray_collision = vertical_ray_collision
 
-  return ray_distance
+  if ray_collision:
+    return {
+      'ray_distance': ray_collision['distance'],
+      'texture_offset': ray_collision['texture_offset']
+    }
 
 func _get_horizontal_ray_collision(player_position, ray_degree):
   # Ignore ray if it's directly facing up or down
@@ -258,7 +235,10 @@ func _get_horizontal_ray_collision(player_position, ray_degree):
       var grid_y_coords = floor(y_intersection / grid_unit_size)
 
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return (x_intersection - player_position.x) * f_i_cos_table[ray_degree]
+        return {
+          'distance': (x_intersection - player_position.x) * f_i_cos_table[ray_degree],
+          'texture_offset': fmod(x_intersection, grid_unit_size)
+        }
 
       i += 1
     else:
@@ -269,7 +249,10 @@ func _get_horizontal_ray_collision(player_position, ray_degree):
       var grid_y_coords = floor(y_intersection / grid_unit_size)
 
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return (x_intersection - player_position.x) * f_i_cos_table[ray_degree]
+        return {
+          'distance': (x_intersection - player_position.x) * f_i_cos_table[ray_degree],
+          'texture_offset': fmod(x_intersection, grid_unit_size)
+        }
 
       if y_intersection < player_view_area.position.y \
          or y_intersection > player_view_area.end.y \
@@ -317,7 +300,10 @@ func _get_vertical_ray_collision(player_position, ray_degree):
       var grid_y_coords = floor(y_intersection / grid_unit_size)
 
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return (y_intersection - player_position.y) * f_i_sin_table[ray_degree]
+        return {
+          'distance': (y_intersection - player_position.y) * f_i_sin_table[ray_degree],
+          'texture_offset': fmod(y_intersection, grid_unit_size)
+        }
 
       i += 1
     else:
@@ -328,7 +314,10 @@ func _get_vertical_ray_collision(player_position, ray_degree):
       var grid_y_coords = floor(y_intersection / grid_unit_size)
 
       if _wall_exists(grid_x_coords, grid_y_coords):
-        return (y_intersection - player_position.y) * f_i_sin_table[ray_degree]
+        return {
+          'distance': (y_intersection - player_position.y) * f_i_sin_table[ray_degree],
+          'texture_offset': fmod(y_intersection, grid_unit_size)
+        }
 
       if y_intersection < player_view_area.position.y \
         or y_intersection > player_view_area.end.y \

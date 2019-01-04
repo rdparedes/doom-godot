@@ -7,6 +7,6 @@
 script = ExtResource( 1 )
 grid_unit_size = 64
 player_speed = 1
-view_distance = 20
+view_distance = 15
 
 
