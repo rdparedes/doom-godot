@@ -5,6 +5,12 @@ export (int) var player_speed = 6
 # View distance in blocks. e.g.: 20 (blocks) x 64 (grid_unit_size) = 1280 pixels of viewing distance
 export (int) var view_distance = 15
 
+export (NodePath) var player_path
+onready var player_ref = get_node(player_path)
+
+export (NodePath) var player_starting_position
+onready var player_starting_pos_ref = get_node(player_starting_position)
+
 const FOV = 60
 var PROJECTION_PLANE_WIDTH = 640
 var PROJECTION_PLANE_HEIGHT = 400
@@ -25,6 +31,8 @@ var ANGLE45 = floor(ANGLE15*3)
 
 var PROJECTION_PLANE_DISTANCE = floor(PROJECTION_X_CENTER / tan(deg2rad(FOV / 2)))
 
+var PROJECTION_TO_360_RATIO = ANGLE360 / 360
+
 # Trigonometric tables for quick calculations (the ones with "i" are inverse tables)
 var f_sin_table = []
 var f_i_sin_table = []
@@ -38,7 +46,7 @@ var f_y_step_table = []
 
 var player = {
   "position": Vector2(0, 0),
-  "rotation": ANGLE0
+  "rotation": ANGLE90
 }
 
 # Vars for debugging
@@ -56,6 +64,10 @@ func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
 
 func _ready():
+  player_ref.position = player_starting_pos_ref.position
+  player.position.x = player_ref.position.x
+  player.position.y = player_ref.position.y
+
   var wall_img = Image.new()
   wall_img.load('res://images/bricks.png')
   wall_texture = ImageTexture.new()
@@ -123,6 +135,8 @@ func _physics_process(delta):
   if Input.is_action_pressed("ui_right"):
     _rotate_right(delta)
 
+  player_ref.rotation_degrees = floor(player.rotation / PROJECTION_TO_360_RATIO)
+
   var player_x_dir = f_cos_table[player.rotation]
   var player_y_dir = f_sin_table[player.rotation]
 
@@ -130,6 +144,9 @@ func _physics_process(delta):
     _move_forward(player_x_dir, player_y_dir)
   if Input.is_action_pressed("ui_down"):
     _move_backwards(player_x_dir, player_y_dir)
+
+  player.position.x = player_ref.position.x
+  player.position.y = player_ref.position.y
 
   player_view_area = Rect2(
     player.position.x - (view_distance/2 * grid_unit_size),
@@ -149,12 +166,10 @@ func _rotate_left(delta):
     player.rotation += ANGLE360
 
 func _move_forward(player_x_dir, player_y_dir):
-  player.position.x += round(player_x_dir * player_speed)
-  player.position.y += round(player_y_dir * player_speed)
+  player_ref.move_and_collide(Vector2(round(player_x_dir * player_speed), round(player_y_dir * player_speed)))
 
 func _move_backwards(player_x_dir, player_y_dir):
-  player.position.x -= round(player_x_dir * player_speed)
-  player.position.y -= round(player_y_dir * player_speed)
+  player_ref.move_and_collide(-Vector2(round(player_x_dir * player_speed), round(player_y_dir * player_speed)))
 
 func _draw_slice(ray_distance, ray_index, player_rotation, texture_offset):
   var projected_slice_height = grid_unit_size * PROJECTION_PLANE_DISTANCE / ray_distance

@@ -6,7 +6,7 @@
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Wall.tscn" type="PackedScene" id=5]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -15,13 +15,15 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="StartPosition" type="Position2D" parent="." index="1"]
 
-position = Vector2( 128, 128 )
+position = Vector2( 96, 32 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Projection" parent="." index="2" instance=ExtResource( 3 )]
 
-player_speed = 7
+player_speed = 4
 view_distance = 30
+player_path = NodePath("../HUD/Player")
+player_starting_position = NodePath("../StartPosition")
 
 [node name="HUD" type="Node2D" parent="." index="3"]
 
@@ -29,9 +31,6 @@ scale = Vector2( 0.5, 0.5 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Player" parent="HUD" index="0" instance=ExtResource( 4 )]
-
-angular_velocity = 100
-speed = 5
 
 [node name="Obstacles" type="Node2D" parent="HUD" index="1"]
 

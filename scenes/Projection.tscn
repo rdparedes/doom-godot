@@ -2,11 +2,13 @@
 
 [ext_resource path="res://scripts/Projection.gd" type="Script" id=1]
 
-[node name="Projection" type="Node2D" index="0"]
+[node name="Projection" type="Node2D"]
 
 script = ExtResource( 1 )
 grid_unit_size = 64
-player_speed = 1
+player_speed = 6
 view_distance = 15
+player_path = null
+player_starting_position = null
 
 

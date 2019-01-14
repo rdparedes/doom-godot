@@ -3,10 +3,10 @@
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://images/player.png" type="Texture" id=2]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
-radius = 1.05859
+extents = Vector2( 10, 10 )
 
 [node name="Player" type="KinematicBody2D"]
 
@@ -16,8 +16,6 @@ collision_mask = 1
 collision/safe_margin = 0.08
 script = ExtResource( 1 )
 _sections_unfolded = [ "Collision", "Transform" ]
-angular_velocity = null
-speed = null
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 
@@ -27,6 +25,8 @@ _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform",
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
 
+position = Vector2( -1.40071e-06, -0.999999 )
+scale = Vector2( 1.84615, 0.384615 )
 shape = SubResource( 1 )
 _sections_unfolded = [ "Material", "Transform", "Visibility", "Z Index" ]
 
