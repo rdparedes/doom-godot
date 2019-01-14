@@ -64,6 +64,7 @@ func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
 
 func _ready():
+  # Put player in initial position
   player_ref.position = player_starting_pos_ref.position
   player.position.x = player_ref.position.x
   player.position.y = player_ref.position.y
@@ -125,7 +126,7 @@ func _ready():
 
 func _draw():
   _cast_rays()
-  
+
 func _process(delta):
   update()
 
@@ -145,6 +146,8 @@ func _physics_process(delta):
   if Input.is_action_pressed("ui_down"):
     _move_backwards(player_x_dir, player_y_dir)
 
+  player_ref.position.x = floor(player_ref.position.x)
+  player_ref.position.y = floor(player_ref.position.y)
   player.position.x = player_ref.position.x
   player.position.y = player_ref.position.y
 

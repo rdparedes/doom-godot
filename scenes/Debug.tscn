@@ -4,26 +4,48 @@
 [ext_resource path="res://scripts/HIntersection.gd" type="Script" id=2]
 [ext_resource path="res://scripts/VIntersection.gd" type="Script" id=3]
 
-[node name="Debug" type="CanvasLayer"]
+[node name="Debug" type="Control"]
 
-layer = 1
-offset = Vector2( 0, 0 )
-rotation = 0.0
-scale = Vector2( 1, 1 )
-transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-script = ExtResource( 1 )
-
-[node name="Angle" type="Control" parent="." index="0"]
-
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 10.0
-margin_bottom = 10.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = ExtResource( 1 )
+
+[node name="PanelContainer" type="PanelContainer" parent="." index="0"]
+
+modulate = Color( 1, 1, 1, 0.524863 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 320.0
+margin_bottom = 96.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+_sections_unfolded = [ "Focus", "Grow Direction", "Hint", "Margin", "Mouse", "Rect", "Size Flags", "Theme", "Visibility" ]
+
+[node name="Angle" type="Control" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 32.0
+margin_top = 16.0
+margin_right = 157.0
+margin_bottom = 44.0
+rect_scale = Vector2( 2, 2 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -53,7 +75,7 @@ text = "Angle: "
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Size Flags", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
 
 [node name="Value" type="Label" parent="Angle" index="1"]
 
@@ -62,7 +84,7 @@ anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.0
 margin_left = 65.0
-margin_right = 73.0
+margin_right = -27.0
 margin_bottom = 14.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -76,17 +98,27 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
 
-[node name="Position" type="Control" parent="." index="1"]
+[node name="FirstRay" type="Node2D" parent="." index="2"]
 
-editor/display_folded = true
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
+
+[node name="LastRay" type="Node2D" parent="." index="3"]
+
+script = ExtResource( 3 )
+_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
+
+[node name="Position" type="Control" parent="." index="4"]
+
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 10.0
-margin_top = 25.0
-margin_right = 10.0
-margin_bottom = 25.0
+margin_left = 32.0
+margin_top = 48.0
+margin_right = 274.0
+margin_bottom = 130.0
+rect_scale = Vector2( 2, 2 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -138,78 +170,5 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Rect" ]
-
-[node name="Ray" type="Control" parent="." index="2"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 10.0
-margin_top = 40.0
-margin_right = 10.0
-margin_bottom = 25.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect" ]
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Label" type="Label" parent="Ray" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 44.0
-margin_bottom = 14.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "Ray:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
-
-[node name="Value" type="Label" parent="Ray" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 0.0
-margin_left = 65.0
-margin_right = 73.0
-margin_bottom = 14.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "0"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Margin", "Rect" ]
-
-[node name="FirstRay" type="Node2D" parent="." index="3"]
-
-script = ExtResource( 2 )
-_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
-
-[node name="LastRay" type="Node2D" parent="." index="4"]
-
-script = ExtResource( 3 )
-_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 
 

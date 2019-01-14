@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Control
 
 const NO_INTERSECTION = { "x": -1, "y": -1 }
 

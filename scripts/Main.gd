@@ -18,6 +18,6 @@ func _process(delta):
     $HUD.show() if $HUD.visible == false else $HUD.hide()
 
   if $HUD.visible == true:
-    $Debug.update_player_angle($HUD/Player.rotation_degrees)
-    $Debug.update_player_position($Projection.player.position)
-    $Debug.update_ray($Projection.debug_first_ray, $Projection.debug_last_ray)
+    $HUD/Debug.update_player_angle($HUD/Player.rotation_degrees)
+    $HUD/Debug.update_player_position($Projection.player.position)
+    $HUD/Debug.update_ray($Projection.debug_first_ray, $Projection.debug_last_ray)
