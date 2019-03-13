@@ -228,10 +228,6 @@ func _cast_ray(player_position, ray_degree, is_first_ray, is_last_ray):
     }
 
 func _get_horizontal_ray_collision(player_position, ray_degree):
-  # Ignore ray if it's directly facing up or down
-  if ray_degree == ANGLE90 or ray_degree == ANGLE270:
-    return null
-
   var is_facing_down = (ray_degree > ANGLE0 and ray_degree < ANGLE180)
   var y_intersection
   var x_intersection
@@ -293,10 +289,6 @@ func _find_next_X_h_intersection(ray_degree):
   return f_x_step_table[ray_degree]
 
 func _get_vertical_ray_collision(player_position, ray_degree):
-  # Ignore ray if it's directly facing right or left
-  if ray_degree == ANGLE0 or ray_degree == ANGLE180:
-    return null
-
   var is_facing_left = (ray_degree > ANGLE90 and ray_degree < ANGLE270)
   var x_intersection
   var y_intersection
