@@ -5,6 +5,8 @@ export (int) var player_speed = 6
 # View distance in blocks. e.g.: 20 (blocks) x 64 (grid_unit_size) = 1280 pixels of viewing distance
 export (int) var view_distance = 15
 
+export (Texture) var wall_texture
+
 export (NodePath) var player_path
 onready var player_ref = get_node(player_path)
 
@@ -58,7 +60,6 @@ var debug_ray_intersection
 var map_representation
 var player_view_area = Rect2(0, 0, 0, 0)
 
-var wall_texture
 
 func arcToRad(angle):
   return ((angle*PI)/ANGLE180)
@@ -68,11 +69,6 @@ func _ready():
   player_ref.position = player_starting_pos_ref.position
   player.position.x = player_ref.position.x
   player.position.y = player_ref.position.y
-
-  var wall_img = Image.new()
-  wall_img.load('res://images/bricks.png')
-  wall_texture = ImageTexture.new()
-  wall_texture.create_from_image(wall_img)
 
   # populate lookup tables with rad values
   var radian
