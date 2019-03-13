@@ -49,6 +49,8 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="Player" parent="HUD" index="1" instance=ExtResource( 4 )]
 
+_sections_unfolded = [ "Collision", "Transform", "collision" ]
+
 [node name="Obstacles" type="Node2D" parent="HUD" index="2"]
 
 editor/display_folded = true
@@ -502,7 +504,7 @@ margin_left = 898.0
 margin_top = 32.0
 margin_right = 898.0
 margin_bottom = 32.0
-_sections_unfolded = [ "Rect", "Size Flags" ]
+_sections_unfolded = [ "Anchor", "Margin", "Rect", "Size Flags" ]
 
 [node name="UiToggleLabel" type="Label" parent="." index="3"]
 
